@@ -1,32 +1,34 @@
 const { registerBlockType } = wp.blocks;
+const { createElement } = wp.element;
 const { useBlockProps } = wp.blockEditor;
 const { TextControl } = wp.components;
 
 registerBlockType('itb/toc', {
-    edit: ({ attributes, setAttributes }) => {
+    title: 'Tabla de contenidos',
+    category: 'widgets',
+    icon: 'list-view',
+    supports: { html: false },
 
+    edit: function(props) {
         const blockProps = useBlockProps();
-
-        return (
-            <div {...blockProps}>
-                <TextControl
-                    label="Título (opcional)"
-                    value={attributes.title || 'Contenido'}
-                    onChange={(value) => setAttributes({ title: value })}
-                    __next40pxDefaultSize={true}
-                    __nextHasNoMarginBottom={true}
-                />
-                <p>La tabla de contenidos se generará automáticamente en el frontend.</p>
-            </div>
+        return createElement(
+            'div',
+            blockProps,
+            createElement(TextControl, {
+                label: 'Título (opcional)',
+                value: props.attributes.title || 'Contenido',
+                onChange: function(value) { props.setAttributes({ title: value }); }
+            }),
+            createElement('p', null, 'La tabla de contenidos se generará automáticamente en el frontend.')
         );
     },
 
-    save: ({ attributes }) => {
-        return (
-            <div className="itb-toc">
-                {attributes.title && <h3>{attributes.title}</h3>}
-                <div className="itb-toc-list"></div>
-            </div>
+    save: function(props) {
+        return createElement(
+            'div',
+            { className: 'itb-toc' },
+            props.attributes.title ? createElement('h3', null, props.attributes.title) : null,
+            createElement('div', { className: 'itb-toc-list' })
         );
     }
 });
