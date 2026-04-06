@@ -1,0 +1,40 @@
+.itb-toc {
+    padding: 1rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.itb-toc h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.itb-toc ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.itb-toc li {
+    margin-bottom: 0.4rem;
+}
+
+.itb-toc li.toc-h3 {
+    margin-left: 1rem;
+    font-size: 0.95em;
+}
+
+.itb-toc a {
+    text-decoration: none;
+}
+
+.itb-toc a:hover {
+    text-decoration: underline;
+}
+
+/* Scroll offset para header fijo */
+.entry-content h2,
+.entry-content h3 {
+    scroll-margin-top: 80px;
+}
