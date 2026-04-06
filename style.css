@@ -1,40 +1,31 @@
 .itb-toc {
-    padding: 1rem;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
 }
 
 .itb-toc h3 {
     margin-top: 0;
-    margin-bottom: 0.5rem;
+    font-size: 18px;
+    font-weight: 600;
 }
 
-.itb-toc ul {
+.itb-toc-list ul {
     list-style: none;
     padding-left: 0;
     margin: 0;
 }
 
-.itb-toc li {
-    margin-bottom: 0.4rem;
+.itb-toc-list li {
+    margin-bottom: 5px;
 }
 
-.itb-toc li.toc-h3 {
-    margin-left: 1rem;
-    font-size: 0.95em;
-}
-
-.itb-toc a {
+.itb-toc-list li a {
     text-decoration: none;
+    color: #0073aa;
 }
 
-.itb-toc a:hover {
+.itb-toc-list li a:hover {
     text-decoration: underline;
-}
-
-/* Scroll offset para header fijo */
-.entry-content h2,
-.entry-content h3 {
-    scroll-margin-top: 80px;
 }

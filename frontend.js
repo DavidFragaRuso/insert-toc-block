@@ -1,59 +1,27 @@
-document.addEventListener('DOMContentLoaded', function () {
+jQuery(document).ready(function($) {
+    $('.itb-toc').each(function() {
+        var $tocContainer = $(this).find('.itb-toc-list');
+        var $content = $(this).closest('.entry-content');
+        if (!$content.length) return;
 
-    const tocContainer = document.querySelector('.itb-toc-list');
-    if (!tocContainer) return;
-
-    const content = document.querySelector('.entry-content');
-    if (!content) return;
-
-    const headings = content.querySelectorAll('h2, h3');
-    if (!headings.length) return;
-
-    let usedIds = {};
-
-    const tocItems = [];
-
-    headings.forEach((heading, index) => {
-
-        let text = heading.textContent.trim();
-
-        let baseId = text
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]/g, '');
-
-        if (!baseId) return;
-
-        if (usedIds[baseId]) {
-            usedIds[baseId]++;
-            baseId += '-' + usedIds[baseId];
-        } else {
-            usedIds[baseId] = 1;
+        var $headings = $content.find('h2, h3, h4');
+        if (!$headings.length) {
+            $tocContainer.html('<p>No hay encabezados para generar la tabla.</p>');
+            return;
         }
 
-        heading.id = baseId;
-
-        tocItems.push({
-            id: baseId,
-            text: text,
-            tag: heading.tagName
+        var $ul = $('<ul></ul>');
+        $headings.each(function() {
+            var $heading = $(this);
+            var text = $heading.text();
+            var id = $heading.attr('id');
+            if (!id) {
+                id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+                $heading.attr('id', id);
+            }
+            $ul.append('<li class="toc-' + this.tagName.toLowerCase() + '"><a href="#' + id + '">' + text + '</a></li>');
         });
+
+        $tocContainer.append($ul);
     });
-
-    const ul = document.createElement('ul');
-
-    tocItems.forEach(item => {
-
-        const li = document.createElement('li');
-        li.className = 'toc-' + item.tag.toLowerCase();
-
-        const a = document.createElement('a');
-        a.href = '#' + item.id;
-        a.textContent = item.text;
-
-        li.appendChild(a);
-        ul.appendChild(li);
-    });
-
-    tocContainer.appendChild(ul);
 });
