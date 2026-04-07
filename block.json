@@ -1,0 +1,8 @@
+{
+  "apiVersion": 3,
+  "name": "idp/toc",
+  "title": "Tabla de Contenidos",
+  "category": "widgets",
+  "icon": "list-view",
+  "editorScript": "itb-toc-block"
+}

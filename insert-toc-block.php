@@ -1,60 +1,48 @@
 <?php
 /**
  * Plugin Name: Insert TOC Block
- * Description: Bloque de tabla de contenidos para Gutenberg con renderizado front.
- * Version: 1.0.0
+ * Description: Bloque de tabla de contenidos para Gutenberg con renderizado front y IDs automáticos en h2/h3.
+ * Version: 1.0.1
  * Author: David Fraga
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Evita acceso directo
+if ( ! defined( 'ABSPATH' ) ) exit;
 
-function itb_register_toc_block() {
-    $dir = plugin_dir_path( __FILE__ );
-
-    // Encolamos JS del bloque
-    wp_enqueue_script(
-        'itb-toc-block',
-        plugins_url( 'block.js', __FILE__ ),
-        array( 'wp-blocks', 'wp-element', 'wp-editor' ),
-        filemtime( $dir . 'block.js' ),
-        true
-    );
-
-    // Encolamos CSS (editor + front)
-    wp_enqueue_style(
-        'itb-toc-block-style',
-        plugins_url( 'style.css', __FILE__ ),
-        array(),
-        filemtime( $dir . 'style.css' )
-    );
+// Añadir IDs automáticos a h2/h3
+function itb_add_ids_to_headers_regex($content) {
+    return preg_replace_callback('/<h([23])(.*?)>(.*?)<\/h\1>/i', function($matches) {
+        $tag = $matches[1];
+        $attrs = $matches[2];
+        $text = strip_tags($matches[3]);
+        if (!preg_match('/id=/', $attrs)) {
+            $id = sanitize_title($text);
+            $attrs .= ' id="'.$id.'"';
+        }
+        return "<h$tag$attrs>$matches[3]</h$tag>";
+    }, $content);
 }
-add_action( 'enqueue_block_assets', 'itb_register_toc_block' );
+add_filter('the_content', 'itb_add_ids_to_headers_regex', 5);
 
-// Renderizado front
+// Renderizado dinámico del bloque TOC
 function itb_render_toc_block( $attributes ) {
+
+   //return '<div style="background:green;color:white;padding:10px;">FUNCIONA</div>';
+
     global $post;
     if ( ! $post ) return '';
 
     $content = $post->post_content;
 
-    // Usamos DOMDocument para parsear HTML
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $dom->loadHTML( '<?xml encoding="utf-8" ?>' . $content );
-    $xpath = new DOMXPath($dom);
+    // Regex simple para h2/h3
+    preg_match_all('/<h([23])(?:[^>]*)>(.*?)<\/h[23]>/i', $content, $matches, PREG_SET_ORDER);
 
-    $headers = $xpath->query('//h2|//h3');
-    if ( !$headers->length ) return '';
+    if (empty($matches)) return '';
 
     $toc = '<div class="itb-toc"><ul>';
-    foreach ( $headers as $header ) {
-        $text = trim( $header->textContent );
-        $id = $header->getAttribute('id');
-        if ( !$id ) {
-            $id = sanitize_title($text);
-            $header->setAttribute('id', $id);
-        }
-        $tag = $header->nodeName;
+    foreach ($matches as $match) {
+        $tag = 'h' . $match[1];
+        $text = strip_tags($match[2]);
+        $id = sanitize_title($text);
         $class = $tag === 'h3' ? 'itb-toc-h3' : 'itb-toc-h2';
         $toc .= sprintf('<li class="%s"><a href="#%s">%s</a></li>', $class, $id, esc_html($text));
     }
@@ -63,11 +51,18 @@ function itb_render_toc_block( $attributes ) {
     return $toc;
 }
 
-// Registro del bloque dinámico
 function itb_register_dynamic_block() {
-    register_block_type( 'idp/toc', array(
+    $dir = plugin_dir_path( __FILE__ );
+
+    wp_register_script(
+        'itb-toc-block',
+        plugins_url( 'block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-element', 'wp-editor' ),
+        filemtime( $dir . 'block.js' )
+    );
+
+    register_block_type( __DIR__, array(
         'render_callback' => 'itb_render_toc_block',
-        'api_version' => 3,
-    ) );
+    ));
 }
 add_action( 'init', 'itb_register_dynamic_block' );

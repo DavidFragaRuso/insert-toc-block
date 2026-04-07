@@ -1,26 +1,21 @@
 .itb-toc {
     border: 1px solid #ddd;
-    padding: 1rem;
-    margin-bottom: 2rem;
-    background: #f9f9f9;
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
 }
 
 .itb-toc ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
+    padding-left: 0;
 }
 
 .itb-toc li {
-    margin: 0.3rem 0;
-}
-
-.itb-toc-h2 {
-    font-weight: bold;
+    margin: 5px 0;
 }
 
 .itb-toc-h3 {
-    padding-left: 1rem;
+    margin-left: 15px;
 }
 
 .itb-toc a {
@@ -30,9 +25,4 @@
 
 .itb-toc a:hover {
     text-decoration: underline;
-}
-
-.itb-placeholder {
-    color: #555;
-    font-style: italic;
 }

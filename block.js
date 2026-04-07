@@ -1,9 +1,9 @@
 (function(wp) {
-    const itb_registerBlockType = wp.blocks.registerBlockType;
+    const { registerBlockType } = wp.blocks;
     const { createElement: el } = wp.element;
-    const { RichText } = wp.blockEditor || wp.editor; 
+    const { RichText } = wp.blockEditor || wp.editor;
 
-    itb_registerBlockType('idp/toc', {
+    registerBlockType('idp/toc', {
         apiVersion: 3,
         title: 'Tabla de Contenidos',
         icon: 'list-view',
@@ -20,20 +20,12 @@
                     className: 'insert-toc-block',
                     value: content,
                     onChange: (value) => setAttributes({ content: value }),
-                    placeholder: 'Aquí aparecerá la tabla de contenidos...'
+                    placeholder: 'Aquí aparecerá la tabla de contenidos en el front'
                 }
             );
         },
-        save: (props) => {
-            const { attributes: { content } } = props;
-            return el(
-                RichText.Content,
-                {
-                    tagName: 'div',
-                    className: 'insert-toc-block',
-                    value: content
-                }
-            );
+        save: () => {
+            return null; // Bloque dinámico, renderiza en PHP
         }
     });
 })(window.wp);
