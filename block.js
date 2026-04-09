@@ -9,19 +9,26 @@
         icon: 'list-view',
         category: 'widgets',
         attributes: {
+            title: { type: 'string', default: 'Índice' },
             content: { type: 'string', source: 'html', selector: '.insert-toc-block' }
         },
         edit: (props) => {
-            const { attributes: { content }, setAttributes } = props;
-            return el(
-                RichText,
-                {
+            const { attributes: { title, content }, setAttributes } = props;
+
+            return el('div', { className: 'insert-toc-block' },
+                el(RichText, {
                     tagName: 'div',
-                    className: 'insert-toc-block',
+                    className: 'itb-toc-title-editor',
+                    value: title,
+                    onChange: (value) => setAttributes({ title: value }),
+                    placeholder: 'Título del índice...'
+                }),
+                el(RichText, {
+                    tagName: 'div',
                     value: content,
                     onChange: (value) => setAttributes({ content: value }),
                     placeholder: 'Aquí aparecerá la tabla de contenidos en el front'
-                }
+                })
             );
         },
         save: () => {

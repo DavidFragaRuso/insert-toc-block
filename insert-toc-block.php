@@ -38,7 +38,15 @@ function itb_render_toc_block( $attributes ) {
 
     if (empty($matches)) return '';
 
-    $toc = '<div class="itb-toc"><ul>';
+    $title = isset($attributes['title']) && !empty($attributes['title'])
+        ? $attributes['title']
+        : 'Índice';
+
+    $output = '<div class="itb-toc"';
+    $output .= '<div class="itb-toc-title">' . esc_html($title) . '</div>';
+    $output .= '<ul>';
+
+    $toc = '';
     foreach ($matches as $match) {
         $tag = 'h' . $match[1];
         $text = strip_tags($match[2]);
@@ -46,9 +54,10 @@ function itb_render_toc_block( $attributes ) {
         $class = $tag === 'h3' ? 'itb-toc-h3' : 'itb-toc-h2';
         $toc .= sprintf('<li class="%s"><a href="#%s">%s</a></li>', $class, $id, esc_html($text));
     }
-    $toc .= '</ul></div>';
 
-    return $toc;
+    $output .= $toc . '</ul></div>';
+
+    return $output;
 }
 
 function itb_register_dynamic_block() {
