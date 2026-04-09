@@ -1,11 +1,14 @@
 .itb-toc {
     border: 1px solid #ddd;
-    padding: 10px 15px;
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
+    padding: 30px 15px;
+    background-color: #3b3b3b;
+    margin-bottom: 50px;
+}
+.itb-toc-title {
+    font-weight: bold;
 }
 
-.itb-toc ul {
+.itb-toc ul,.itb-toc ol {
     list-style: none;
     padding-left: 0;
 }
@@ -15,12 +18,13 @@
 }
 
 .itb-toc-h3 {
-    margin-left: 15px;
+    margin-left: 30px!important;
 }
 
 .itb-toc a {
     text-decoration: none;
-    color: #0073aa;
+    color: #b91c1c;
+    font-weight: bolder;
 }
 
 .itb-toc a:hover {

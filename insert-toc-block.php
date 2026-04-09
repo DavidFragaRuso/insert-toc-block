@@ -42,7 +42,7 @@ function itb_render_toc_block( $attributes ) {
         ? $attributes['title']
         : 'Índice';
 
-    $output = '<div class="itb-toc"';
+    $output = '<div class="itb-toc">';
     $output .= '<div class="itb-toc-title">' . esc_html($title) . '</div>';
     $output .= '<ul>';
 
@@ -70,8 +70,16 @@ function itb_register_dynamic_block() {
         filemtime( $dir . 'block.js' )
     );
 
+    wp_register_style(
+        'itb-toc-style',
+        plugins_url( 'style.css', __FILE__ ),
+        array(),
+        filemtime( $dir . 'style.css' )
+    );
+
     register_block_type( __DIR__, array(
         'render_callback' => 'itb_render_toc_block',
+        'style'           => 'itb-toc-style',
     ));
 }
 add_action( 'init', 'itb_register_dynamic_block' );
