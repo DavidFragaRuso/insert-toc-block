@@ -8,14 +8,20 @@
         title: 'Tabla de Contenidos',
         icon: 'list-view',
         category: 'widgets',
-        attributes: {
-            title: { type: 'string', default: 'Índice' },
-            content: { type: 'string', source: 'html', selector: '.insert-toc-block' }
-        },
-        edit: (props) => {
-            const { attributes: { title, content }, setAttributes } = props;
 
-            return el('div', { className: 'insert-toc-block' },
+        attributes: {
+            title: {
+                type: 'string',
+                default: 'Índice'
+            }
+        },
+
+        edit: (props) => {
+            const { attributes: { title }, setAttributes } = props;
+
+            return el('div', { className: 'itb-toc-editor' },
+
+                // Campo editable del título
                 el(RichText, {
                     tagName: 'div',
                     className: 'itb-toc-title-editor',
@@ -23,16 +29,15 @@
                     onChange: (value) => setAttributes({ title: value }),
                     placeholder: 'Título del índice...'
                 }),
-                el(RichText, {
-                    tagName: 'div',
-                    value: content,
-                    onChange: (value) => setAttributes({ content: value }),
-                    placeholder: 'Aquí aparecerá la tabla de contenidos en el front'
-                })
+
+                // Preview simple (UX)
+                el('div', { className: 'itb-toc-placeholder' },
+                    el('p', {}, 'La tabla de contenidos se generará automáticamente en el front.')
+                )
             );
         },
-        save: () => {
-            return null; // Bloque dinámico, renderiza en PHP
-        }
+
+        save: () => null // Bloque dinámico
     });
+
 })(window.wp);
